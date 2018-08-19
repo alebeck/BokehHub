@@ -4,11 +4,9 @@
 * (c) 2018
 */
 
-
 const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
-const fileUpload = require('./lib/express-fileupload');
 const session = require('express-session');
 const proxy = require('http-proxy-middleware');
 const RedisStore = require('connect-redis')(session);
@@ -18,7 +16,9 @@ const spawn = require('child_process').spawn;
 const randomstring = require('randomstring');
 const mustacheExpress = require('mustache-express');
 const request = require('request-promise');
-const parser = require('./includes/argument_parser');
+
+const parser = require('./lib/argument-parser');
+const fileUpload = require('./lib/express-fileupload');
 
 const args = parser.parseArgs();
 const config = new Config(args.configPath);
@@ -547,6 +547,7 @@ app.set('view engine', 'mustache');
 const _session = session({
     store: new RedisStore({host: 'redis'}),
     secret: generateToken(),
+    saveUninitialized: false,
     resave: false
 });
 
