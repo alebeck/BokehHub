@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 		var plotLoader = document.createElement('div');
 		plotLoader.className = 'plot-loader';
-		plotLoader.setAttribute('style', 'margin-top: ' + (parseInt(height)/2 - 35) + 'px');
+		plotLoader.setAttribute('style', 'position: absolute; margin-top: ' + (parseInt(height)/2 - 35) + 'px');
 
 		if (!width.endsWith('px')) {
 			width += 'px';
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		if (!height.endsWith('px')) {
 			height += 'px';
 		}
-		plotDiv.setAttribute('style', 'margin: 0 auto; width: ' + width + '; height: ' + height);
+		plotDiv.setAttribute('style', 'margin: 0 auto; position: relative; width: ' + width + '; height: ' + height);
 		plotContainer.appendChild(plotDiv);
 
 		plot.parentNode.insertBefore(plotContainer, plot.nextSibling);
