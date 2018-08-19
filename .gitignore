@@ -1,0 +1,6 @@
+.ipynb_checkpoints
+__pycache__/
+sftp-config.json
+node_modules/
+.texpadtmp
+

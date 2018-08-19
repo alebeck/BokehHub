@@ -1,0 +1,16 @@
+version: '3'
+services:
+
+  bokehhub:
+    build: .
+    ports: 
+      - '80:8000'
+    volumes:
+      - ~/bokehserver/datasets:/usr/src/bokehhub/bokehserver/data/datasets
+      - ~/bokehserver/plots:/usr/src/bokehhub/bokehserver/plots
+      - ~/bokehserver/config:/usr/src/bokehhub/config
+    restart: always
+
+  redis:
+    image: "redis:alpine"
+    restart: always
