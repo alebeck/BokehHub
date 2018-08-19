@@ -29,6 +29,8 @@ var bokehServers = [
     {port: args.bokehPort2, active: true}
 ];
 
+console.log(bokehServers);
+
 var restartCallbacks = [];
 var bokehRestarting = false;
 var bokehQueue = [];
@@ -629,8 +631,12 @@ app.use('/static/*', proxy({
 }));
 
 // this middleware proxies websocket connections to the bokeh servers
-var wsProxy = proxy({
-    target: 'http://localhost:8001/',
+var filter = function (pathname, req) {
+    console.log(pathname);
+    return (pathname.match('^/api') && req.method === 'GET');
+};
+var wsProxy = proxy(filter, {
+    target: `http://localhost:${bokehServers.filter(server => server.active)[0].port}/`,
     changeOrigin: true,
     ws: true,
     logLevel: 'warn',
@@ -654,7 +660,6 @@ var wsProxy = proxy({
             let port = bokehServers.filter(server => server.active)[0].port;
             return 'http://localhost:'+port;
         }
-
         // fail
         return 'http://localhost:7000/';
     }
