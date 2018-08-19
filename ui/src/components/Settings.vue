@@ -87,7 +87,7 @@ export default {
         }
       }
 
-      if (!/^(https?):\/\/((([A-Z\d\.-]{2,})\.([A-Z]{2,}))|localhost|((\d{1,3}\.){3}\d{1,3}))(:\d{2,4})?$/.test(this.settings.hostname)) {
+      if (!/^(https?):\/\/((([a-z\d\.-]{2,})\.([a-z]{2,}))|localhost|((\d{1,3}\.){3}\d{1,3}))(:\d{2,4})?$/.test(this.settings.hostname)) {
         this.urlError = true;
       }
 
