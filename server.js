@@ -631,10 +631,6 @@ app.use('/static/*', proxy({
 }));
 
 // this middleware proxies websocket connections to the bokeh servers
-var filter = function (pathname, req) {
-    console.log(pathname);
-    return (pathname.match('^/api') && req.method === 'GET');
-};
 var wsProxy = proxy(filter, {
     target: `http://localhost:${bokehServers.filter(server => server.active)[0].port}/`,
     changeOrigin: true,

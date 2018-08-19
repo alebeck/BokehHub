@@ -4,7 +4,7 @@ services:
   bokehhub:
     build: .
     ports: 
-      - '8003:8000'
+      - '80:8000'
     volumes:
       - ~/bokehhub/datasets:/usr/src/bokehhub/bokehserver/data/datasets
       - ~/bokehhub/plots:/usr/src/bokehhub/bokehserver/plots
