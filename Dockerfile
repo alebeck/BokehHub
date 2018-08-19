@@ -25,9 +25,6 @@ COPY . .
 # declare used ports
 EXPOSE 8000
 
-# don't run application as root
-USER node
-
 # set node to production
 ENV NODE_ENV=production
 
