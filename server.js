@@ -29,8 +29,6 @@ var bokehServers = [
     {port: args.bokehPort2, active: true}
 ];
 
-console.log(bokehServers);
-
 var restartCallbacks = [];
 var bokehRestarting = false;
 var bokehQueue = [];
@@ -310,19 +308,15 @@ const postPlot = function(req, res) {
         return;
     }
     var id = generateID();
-    var token = generateToken();
     plots.push({
         id: id,
         code: req.body.code,
         title: getTitle(req.body.code),
         status: 'pending',
-        date: getDate(new Date()),
-        token: token
+        date: getDate(new Date())
     })
     var writeFile = function(cb) {
         fs.writeFile(args.plotPath + 'plot_' + id + '.py', req.body.code, err => cb(err));
-        config.put('tokens.' + id, token);
-        config.save();
     }
 
     restartServer({plot: id}, writeFile, () => {}, res);
