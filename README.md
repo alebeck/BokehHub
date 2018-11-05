@@ -59,7 +59,7 @@ Additionally, hiding the Bokeh toolbar is advised in most cases. To do so, just 
 
 ```python
 p = figure(
-	toolbar_location=None, 
+	toolbar_location = None, 
 	# additional arguments
 	)
 ```
