@@ -19,26 +19,26 @@ import 'element-ui/lib/theme-chalk/index.css';
 import 'element-ui/lib/theme-chalk/display.css';
 import 'vue-status-indicator/styles.css'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-Vue.use(Element, {size: 'medium'})
-Vue.use(VueClip)
+Vue.use(Element, {size: 'medium'});
+Vue.use(VueClip);
 Vue.use(VueProgressBar, {
-  color: 'rgb(143, 255, 199)',
-  failedColor: 'red',
-  height: '2px'
-})
+	color: 'rgb(143, 255, 199)',
+	failedColor: 'red',
+	height: '2px'
+});
 
-Vue.component('icon', Icon)
-Vue.component('status-indicator', StatusIndicator)
+Vue.component('icon', Icon);
+Vue.component('status-indicator', StatusIndicator);
 
 axios.defaults.baseURL = '/api/';
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
+	el: '#app',
+	router,
+	store,
+	components: { App },
+	template: '<App/>'
+});

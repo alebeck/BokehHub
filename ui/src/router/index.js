@@ -17,37 +17,37 @@ import Login from '@/components/Login'
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-        path: '/login',
-        name: 'Login',
-        component: Login,
-        beforeEnter: (to, from, next) => store.getters.isAuth ? next('/') : next()
-    },
-    {
-    	path: '/',
-    	name: 'Layout',
-    	component: Layout,
-    	redirect: '/plots',
-    	children: [{
-    		path: '/plots',
-    		name: 'Plots',
-    		component: Plots
-    	},{
-    		path: '/data',
-    		name: 'Data',
-    		component: Data
-    	},{
-    		path: '/settings',
-    		name: 'Settings',
-    		component: Settings,
-            beforeEnter: (to, from, next) => store.getters.isAdmin ? next() : next('/')
-    	}],
-        beforeEnter: (to, from, next) => store.getters.isAuth ? next() : next('/login')
-    },
-    {
-        path: '*', 
-        redirect: '/' 
-    }
-  ]
+	routes: [
+		{
+			path: '/login',
+			name: 'Login',
+			component: Login,
+			beforeEnter: (to, from, next) => store.getters.isAuth ? next('/') : next()
+		},
+		{
+			path: '/',
+			name: 'Layout',
+			component: Layout,
+			redirect: '/plots',
+			children: [{
+				path: '/plots',
+				name: 'Plots',
+				component: Plots
+			},{
+				path: '/data',
+				name: 'Data',
+				component: Data
+			},{
+				path: '/settings',
+				name: 'Settings',
+				component: Settings,
+				beforeEnter: (to, from, next) => store.getters.isAdmin ? next() : next('/')
+			}],
+			beforeEnter: (to, from, next) => store.getters.isAuth ? next() : next('/login')
+		},
+		{
+			path: '*', 
+			redirect: '/' 
+		}
+	]
 })

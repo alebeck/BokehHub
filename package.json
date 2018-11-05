@@ -1,28 +1,28 @@
 {
-  "name": "bokehhub",
-  "version": "1.0.0",
-  "description": "bokehhub",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
-  "author": "Alexander Becker",
-  "dependencies": {
-    "argparse": "^1.0.10",
-    "bcrypt": "^3.0.0",
-    "body-parser": "^1.13.3",
-    "busboy": "^0.2.14",
-    "connect-redis": "^3.3.3",
-    "express": "^4.13.3",
-    "express-session": "^1.15.6",
-    "fs-extra": "^7.0.0",
-    "http-proxy-middleware": "^0.18.0",
-    "mustache-express": "^1.2.7",
-    "node-json-config": "0.0.5",
-    "randomstring": "^1.1.5",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.2",
-    "streamifier": "^0.1.1",
-    "morgan": ""
-  }
+	"name": "bokehhub",
+	"version": "1.0.0",
+	"description": "bokehhub",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"author": "Alexander Becker",
+	"dependencies": {
+		"argparse": "^1.0.10",
+		"bcrypt": "^3.0.0",
+		"body-parser": "^1.13.3",
+		"busboy": "^0.2.14",
+		"connect-redis": "^3.3.3",
+		"express": "^4.13.3",
+		"express-session": "^1.15.6",
+		"fs-extra": "^7.0.0",
+		"http-proxy-middleware": "^0.18.0",
+		"mustache-express": "^1.2.7",
+		"node-json-config": "0.0.5",
+		"randomstring": "^1.1.5",
+		"request": "^2.88.0",
+		"request-promise": "^4.2.2",
+		"streamifier": "^0.1.1",
+		"morgan": ""
+	}
 }

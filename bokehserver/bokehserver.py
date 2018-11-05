@@ -2,7 +2,11 @@
 # Author: Alexander Becker
 # (c) 2018
 
-import os, glob, re, importlib, sys
+import os
+import glob
+import re
+import importlib
+import sys
 
 from bokeh.server.server import Server
 from bokeh.application import Application
