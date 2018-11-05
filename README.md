@@ -1,6 +1,9 @@
 # BokehHub
 BokehHub is an application that comes as a self-contained Docker image and can be run on most operating systems. Once it is started, it serves as a central place to create, manage and publish [Bokeh](https://github.com/bokeh/bokeh) visualizations. It comprises a clean user interface for managing visualizations as well as a Python backend which is responsible for the distribution of visualizations to every place where they are required. Data is held centrally and every update to the data or the way it is presented will automatically be visible everywhere. BokehHub also comes with support for dynamic, server-side data preprocessing which enables us to stream data to our audience or to notify them in case of server-side events. Last but not least, BokehHub provides the possibility to embed visualizations in every website without the need for backend modifications.
 
+## Credits
+I want to thank Daniel Bias for his support & inspiration throughout this project!
+
 ## Motivation
 Visualizing results of scientific research is an important aspect of making publications more accessible to a wider audience. However, common ways of scientific data visualization lack interactivity and do not account for changing or continuously updating data. Moreover, publishing visualizations at more than one place (e.g. multiple websites) leads to redundancy and makes it difficult and time-consuming to maintain.  As a consequence, there is demand for a centralized approach of managing all visualizations at one place. That approach enables researchers to deliver accessible, interactive visualizations which are consistent and redundancy-free.
 
