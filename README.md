@@ -51,7 +51,25 @@ After setup, BokehHub listens on port `80` by default. On the login screen, ente
 To upload a new dataset, go to the `Data` tab and click the `Add new` button. In case you want to update an existing dataset, click the `Arrow up` icon next to the relevant dataset. The new dataset will transparently replace the old one. Note that in this case, the old name of the dataset will be kept in order to avoid problems with plots that rely on that name. After the status indicator next to the relevant dataset has switched from yellow (i.e. pending) to green (i.e. ready), the new dataset is used by every plot which was using the old dataset before.
 
 ### Creating Plots
-You can create a visualization by navigating to the `Plots` tab and clicking `Add New`. A dialog will open which presents a text editor with a boilerplate Bokeh application, ready to be extended. In the upper section of the code, you can see that some python modules have already been imported (e.g. numpy, pandas and some important Bokeh components). You can freely adjust the imports, however keep in mind that new modules which are not installed on the system have to be added to `requirements.txt` in the BokehHub root directory, followed by a rebuild of the Docker image. 
+You can create a visualization by navigating to the `Plots` tab and clicking `Add New`. A dialog will open which presents a text editor with a boilerplate Bokeh application, ready to be extended:
+
+```python
+#! This is the plot's title
+
+# imports (change them as you want)
+from bokeh.plotting import figure
+from bokeh.models import HoverTool, ColumnDataSource, LinearColorMapper, LogColorMapper, ColorBar
+import numpy as np
+import pandas as pd
+
+# the path of a dataset can be accessed via datapath['<name of dataset>']
+from data import datapath
+
+def make_document(doc):
+    # create your plot here and finish this function by calling doc.add_root(<your plot>)
+```
+
+You can freely adjust the imports, however keep in mind that new modules which are not installed on the system have to be added to `requirements.txt` in the BokehHub root directory, followed by a rebuild of the Docker image. 
 
 The path to a dataset which was added beforehand can be retrieved via `datapath[name]` where `name` is the name of the dataset, including file extension. To give an example, the following code would load the content of the `strikes.dta` file into a pandas dataframe:
 
