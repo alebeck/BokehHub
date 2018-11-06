@@ -1,6 +1,24 @@
 # BokehHub
 BokehHub is an application that comes as a self-contained Docker image and can be run on most operating systems. Once it is started, it serves as a central place to create, manage and publish [Bokeh](https://github.com/bokeh/bokeh) visualizations. It comprises a clean user interface for managing visualizations as well as a Python backend which is responsible for the distribution of visualizations to every place where they are required. Data is held centrally and every update to the data or the way it is presented will automatically be visible everywhere. BokehHub also comes with support for dynamic, server-side data preprocessing which enables us to stream data to our audience or to notify them in case of server-side events. Last but not least, BokehHub provides the possibility to embed visualizations in every website without the need for backend modifications.
 
+![Overview](images/1.png)
+
+## Table of Contents
+
+* [Credits](#credits)
+* [Motivation](#motivation)
+* [Prerequisites](#prerequisites)
+* [Setup](#setup)
+* [First Steps](#first-steps)
+* [Features](#features)
+  * [Managing Datasets](#builds)
+  * [Creating Plots](#builds)
+    * [Best Practices]()
+    * [Plot Sizing]()
+  * [Embedding Plots](#builds)
+* [Migration](#first)
+* [To Do](#first)
+
 ## Credits
 I want to thank Daniel Bias for his support & inspiration throughout this project!
 
@@ -64,7 +82,7 @@ Additionally, hiding the Bokeh toolbar is advised in most cases. To do so, just 
 p = figure(
 	toolbar_location = None, 
 	# additional arguments
-	)
+)
 ```
 
 Finally, it is advised to test your plots first in an environment outside of BokehHub. BokehHub will warn you in case of syntax errors, however, runtime errors will be hard to spot and can be easily avoided when testing the plot beforehand. This is particularly relevant when working with very complex visualizations. As a testing environment, Jupyter Notebook / Lab is recommended.
