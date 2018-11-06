@@ -32,8 +32,8 @@ Visualizing results of scientific research is an important aspect of making publ
 
 ## Setup
 ```sh
-# pull repository
-git clone https://github.com/alebeck/bokehhub.git
+# clone repository
+git clone https://github.com/alebeck/BokehHub.git
 
 # change to bokehhub directory
 cd bokehhub
