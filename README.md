@@ -145,4 +145,3 @@ In case you want to migrate your BokehHub installation and keep your configurati
 
 * Multi-user support
 * Migrate data storage to MongoDB
-* Add HoloViews support
