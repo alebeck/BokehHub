@@ -137,7 +137,7 @@ BokehHub creates three subdirectories inside `~/bokehhub`:
 * `plots`: Contains visualizations
 * `data`: Contains datasets
 
-In case you want to migrate your BokehHub installation from one system to another and keep your configuration, plots and data, you will need to copy the `~/bokehhub` directory with the above-mentioned subdirectories.
+In case you want to migrate your BokehHub installation and keep your configuration, plots and data, you will need to copy the `~/bokehhub` directory with the above-mentioned subdirectories.
 
 ## To Do
 
