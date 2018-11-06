@@ -13,8 +13,6 @@ BokehHub is an application that comes as a self-contained Docker image which can
 * [Features](#features)
   * [Managing Datasets](#managing-datasets)
   * [Creating Plots](#creating-plots)
-    * [Best Practices](#best-practices)
-    * [Plot Sizing](#plot-sizing)
   * [Embedding Plots](#embedding-plots)
 * [Migration](#migration)
 * [To Do](#to-do)
@@ -45,7 +43,7 @@ docker-compose up -d
 When starting BokehHub for the first time, this command can take up to 15 minutes. Once BokehHub is running, Docker will monitor the application and take care of restarting it in the event of an error. If you have Docker configured to run on system startup, Docker will also restart BokehHub when the machine is rebooted.
 
 ## First Steps
-After setup, BokehHub listens on port `80` by default. On the login screen, enter the default admin credentials (username: `admin`, password: `admin`) to be forwarded to your plots section. Then, click on the `Settings` set your hostname as well as a new password. The former is mandatory since the BokehHub installation cannot know its public host name or IP address while this information is required for the correct embedding of plots into webpages.
+After setup, BokehHub listens on port `80` by default. On the login screen, enter the default admin credentials (username: `admin`, password: `admin`) to be forwarded to your plots section. Then, navigate to the `Settings` tab to set your hostname as well as a new password. The former is mandatory since the BokehHub installation cannot know its public host name or IP address while this information is required for the correct embedding of plots into webpages.
 
 ## Features
 
