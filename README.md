@@ -96,8 +96,8 @@ Additionally, hiding the Bokeh toolbar is advised in most cases. To do so, just 
 
 ```python
 p = figure(
-	toolbar_location = None, 
-	# additional arguments
+    toolbar_location = None, 
+    # additional arguments
 )
 ```
 
@@ -110,7 +110,25 @@ Sizing your plot correctly will influence the way it behaves both on BokehHub an
 * Instead of passing width and/or height explicitly, you can pass `sizing_mode='stretch_both'` when creating a figure. You can then dynamically set the plot size when embedding it into a web page (see next section for details). Normally, this mode is preferable over the above-mentioned option. However, working with grids in combination with this option is currently not sufficiently supported by Bokeh version 0.12. Therefore, you need to use explicit sizes when working with grids, columns or rows.
 
 ### Embedding Plots
-Plots can be embedded into webpages without alterations to the backend being necessary. To embed a visualization, go to the plot overview in the BokehHub user interface and click the `Show Tokens` symbol in the line corresponding to the relevant plot. In the appearing dialog, you can manage your security tokens. In order to create a new token, click `New Token`. In the following dialog, you will be asked to enter a token name for identification purposes. It is recommended to choose the name of the website which you want to embed the plot into, such that when revoking the token, you can easily identify it by that name.
+To embed a visualization, go to the plot overview and click the `Show Tokens` symbol in the line corresponding to the relevant plot. In the appearing dialog, you can manage your security tokens. In order to create a new token, click `New Token`. In the following dialog, you will be asked to enter a token name for identification purposes. It is recommended to choose the name of the website which you want to embed the plot into, such that when revoking the token, you can easily identify it by that name.
+
+By clicking the embed logo next to an issued token, all relevant information is displayed. This includes a simple `plot` tag which can be inserted in the target page's HTML:
+
+```html
+<plot id="<plot ID>" width="970" height="400" key="<token>"></plot>
+```
+
+Additionally, the BokehHub client script has to be included into the page:
+
+```html
+<script src="http://<BokehHub IP>/js"></script>
+```
+
+This script will resolve all `plot` tags on the page and setup the corresponding visualizations.
+
+#### Security Considerations
+
+When embedding a plot into a website, the source code of that website will reveal the token which is used to gain access to the plot. It is therefore advised to revoke the relevant token once a plot is not used any longer.
 
 ## Migration
 BokehHub creates three subdirectories inside `~/bokehhub`:
