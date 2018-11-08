@@ -1,5 +1,6 @@
 # BokehHub
 ![version](https://img.shields.io/badge/version-0.1-blue.svg?maxAge=2592000)
+
 BokehHub is an application that comes as a self-contained Docker image which can be run on most operating systems. Once it is started, it serves as a central place to create, manage and publish [Bokeh](https://github.com/bokeh/bokeh) visualizations. It comprises a clean user interface for managing visualizations as well as a Python backend which is responsible for the distribution of visualizations to every place where they are required. Data is held centrally and every update to the data or the way it is presented will automatically be visible everywhere. BokehHub also comes with support for dynamic, server-side data preprocessing which enables you to stream data to your audience or to notify them in case of server-side events. Last but not least, BokehHub provides the possibility to embed visualizations in every website without the need for backend modifications.
 
 
