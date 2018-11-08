@@ -23,6 +23,8 @@
 		"request": "^2.88.0",
 		"request-promise": "^4.2.2",
 		"streamifier": "^0.1.1",
-		"morgan": ""
+		"morgan": "",
+		"express-rate-limit": "",
+		"sanitize-filename": ""
 	}
 }

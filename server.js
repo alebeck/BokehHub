@@ -8,6 +8,7 @@ const fs = require('fs');
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const RateLimit = require('express-rate-limit');
 const proxy = require('http-proxy-middleware');
 const path = require('path');
 const RedisStore = require('connect-redis')(session);
@@ -17,6 +18,7 @@ const spawn = require('child_process').spawn;
 const randomstring = require('randomstring');
 const mustacheExpress = require('mustache-express');
 const request = require('request-promise');
+const sanitize = require('sanitize-filename');
 
 const parser = require('./lib/argument-parser');
 const fileUpload = require('./lib/express-fileupload');
@@ -60,10 +62,10 @@ function _restart(writeFile, onRestart, onError) {
 	bokehRestarting = true;
 	console.log('Restarting bokeh server...');
 
-	let active = bokehServers.filter(server => server.active)[0];
-	let inactive = bokehServers.filter(server => !server.active)[0];
+	var active = bokehServers.filter(server => server.active)[0];
+	var inactive = bokehServers.filter(server => !server.active)[0];
 
-	writeRecursive = function(i) {
+	var writeRecursive = function(i) {
 		writeFile[i](function(err) {
 			if (err) {
 				onRestart[i] = () => { onError[i]() };
@@ -93,9 +95,9 @@ function _restart(writeFile, onRestart, onError) {
 
 							// trigger next server restart if queue is not empty
 							if (bokehQueue.length) {
-								writeFileFuncs = bokehQueue.map(o => o.writeFile);
-								onRestartFuncs = bokehQueue.map(o => o.onRestart);
-								onErrorFuncs = bokehQueue.map(o => o.onError);
+								var writeFileFuncs = bokehQueue.map(o => o.writeFile);
+								var onRestartFuncs = bokehQueue.map(o => o.onRestart);
+								var onErrorFuncs = bokehQueue.map(o => o.onError);
 								bokehQueue = [];
 								_restart(writeFileFuncs, onRestartFuncs, onErrorFuncs);
 							}
@@ -168,7 +170,7 @@ function _restart(writeFile, onRestart, onError) {
 function restartServer(arg, writeFile, updateState, res) {
 	// function to apply a function on every object which was changed
 	var apply = function(cb) {
-		pending = [];
+		let pending = [];
 		if (arg.plot) {
 			pending = plots.filter(p => p.id == arg.plot);
 		}
@@ -220,9 +222,9 @@ var tokens = {};
 plots = [];
 files = fs.readdirSync(args.plotPath).filter(f => f.match(/plot_.{8}\.py/));
 files.forEach(function(file, i) {
-	code = fs.readFileSync(args.plotPath + file, 'utf8');
-	stats = fs.statSync(args.plotPath + file);
-	id = file.split('_')[1].split('.')[0];
+	var code = fs.readFileSync(args.plotPath + file, 'utf8');
+	var stats = fs.statSync(args.plotPath + file);
+	var id = file.split('_')[1].split('.')[0];
 
 	plots.push({
 		id: id,
@@ -239,7 +241,7 @@ files.forEach(function(file, i) {
 	if (file.startsWith('.')) {
 		return;
 	}
-	stats = fs.statSync(args.dataPath + file);
+	var stats = fs.statSync(args.dataPath + file);
 	datasets.push({
 		name: file,
 		date: getDate(stats.mtime),
@@ -272,7 +274,7 @@ const putPlot = function(req, res) {
 	}
 	// define function which writes changes to drive
 	var writeFile = function(cb) {
-		fs.writeFile(args.plotPath + 'plot_' + req.params.id + '.py', req.body.code, err => cb(err));
+		fs.writeFile(args.plotPath + 'plot_' + sanitize(req.params.id) + '.py', req.body.code, err => cb(err));
 	};
 	var updateState = function(apply) {
 		apply(obj => {
@@ -292,7 +294,7 @@ const deletePlot = function(req, res) {
 	}
 	// define function which writes changes to drive
 	var writeFile = function(cb) {
-		fs.unlink(args.plotPath + 'plot_' + req.params.id + '.py', err => cb(err));
+		fs.unlink(args.plotPath + 'plot_' + sanitize(req.params.id) + '.py', err => cb(err));
 		config.remove('tokens.' + req.params.id);
 		config.save();
 	};
@@ -366,7 +368,7 @@ const putDataset = function(req, res) {
 	var file = req.files.file;
 	// define function which writes changes to drive
 	var writeFile = function(cb) {
-		fs.unlink(args.dataPath + req.params.name , (err) => {
+		fs.unlink(args.dataPath + sanitize(req.params.name), (err) => {
 			if (err) {
 				cb(err);
 			}
@@ -412,7 +414,7 @@ const deleteDataset = function(req, res) {
 		return;
 	}
 	var writeFile = function(cb) {
-		fs.unlink(args.dataPath + req.params.name , err => cb(err));
+		fs.unlink(args.dataPath + sanitize(req.params.name), err => cb(err));
 	};
 	var updateState = function(apply) {
 		apply(obj => { datasets = datasets.filter(d => d.name != obj.name)});
@@ -427,7 +429,7 @@ const download = function(req, res) {
 		res.status(400).end();
 		return;
 	}
-	res.sendFile(req.params.name, {root: path.join(process.cwd(), args.dataPath)})
+	res.sendFile(sanitize(req.params.name), {root: path.join(process.cwd(), args.dataPath)})
 };
 
 const getSettings = function(req, res) {
@@ -451,7 +453,7 @@ const putSettings = function(req, res) {
 	if (settings.old && settings.new && settings.new_rep) {
 		// change password
 		let logins = config.get('logins');
-		let login = logins.filter(l => l.name === req.session.user.name)[0]
+		let login = logins.filter(l => l.name === req.session.user.name)[0];
 		bcrypt.compare(settings.old, login.password, function(err, response) {
 			if (response && settings.new === settings.new_rep) {
 				bcrypt.hash(settings.new, 10).then(function(hash) {
@@ -571,7 +573,13 @@ api.put('/settings', putSettings);
 api.get('/tokens/:plotId', getTokens);
 api.post('/tokens', postToken);
 api.delete('/tokens', deleteToken);
-app.use('/api', sessionAuth, api);
+
+const rateLimit = new RateLimit({
+	windowMs: 1*60*1000, // 1 minute
+	max: 30
+});
+
+app.use('/api', rateLimit, sessionAuth, api);
 
 // this endpoint delivers the bokeh autoload script
 app.get('/script/:id', function(req, res) {
@@ -603,7 +611,7 @@ app.get('/script/:id', function(req, res) {
 			.catch(function(err) {
 				res.status(500).end();
 				console.error(err);
-			})
+			});
 	} else {
 		res.status(401).end();
 	}
