@@ -170,7 +170,7 @@ function _restart(writeFile, onRestart, onError) {
 function restartServer(arg, writeFile, updateState, res) {
 	// function to apply a function on every object which was changed
 	var apply = function(cb) {
-		let pending = [];
+		var pending = [];
 		if (arg.plot) {
 			pending = plots.filter(p => p.id == arg.plot);
 		}
