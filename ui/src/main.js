@@ -39,7 +39,7 @@ axios.get('/csrf').then(res => {
 	axios.defaults.headers.common = {
 	    'X-CSRF-TOKEN': res.data.token
 	};
-})
+});
 
 /* eslint-disable no-new */
 new Vue({

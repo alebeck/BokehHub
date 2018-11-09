@@ -526,7 +526,7 @@ const deleteToken = function(req, res) {
 
 const getCSRFToken = function(req, res) {
 	res.json({token: req.csrfToken()})
-}
+};
 
 // Session authentication middleware
 const sessionAuth = function(req, res, next) {
