@@ -2,17 +2,13 @@
 # Author: Alexander Becker
 # (c) 2018
 
-import os
 import glob
-import re
 import importlib
 import sys
 
 from bokeh.server.server import Server
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
-from bokeh.util import session_id
-from bokeh.embed import server_session
 
 if len(sys.argv) > 1:
 	PORT = int(sys.argv[1])

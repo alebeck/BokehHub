@@ -9,6 +9,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const RateLimit = require('express-rate-limit');
+const csurf = require('csurf')
 const proxy = require('http-proxy-middleware');
 const path = require('path');
 const RedisStore = require('connect-redis')(session);
@@ -523,9 +524,17 @@ const deleteToken = function(req, res) {
 	res.json({success: true})
 };
 
+const getCSRFToken = function(req, res) {
+	res.json({token: req.csrfToken()})
+}
+
 // Session authentication middleware
 const sessionAuth = function(req, res, next) {
-	if (!req.session.user && req.originalUrl !== '/api/login' && req.originalUrl !== '/api/logout') {
+	if (!req.session.user 
+		&& req.originalUrl !== '/api/login' 
+		&& req.originalUrl !== '/api/logout'
+		&& req.originalUrl !== '/api/csrf') {
+		
 		res.status(401).end();
 		return;
 	}
@@ -573,13 +582,14 @@ api.put('/settings', putSettings);
 api.get('/tokens/:plotId', getTokens);
 api.post('/tokens', postToken);
 api.delete('/tokens', deleteToken);
+api.get('/csrf', getCSRFToken);
 
 const rateLimit = new RateLimit({
 	windowMs: 1*60*1000, // 1 minute
 	max: 30
 });
 
-app.use('/api', rateLimit, sessionAuth, api);
+app.use('/api', rateLimit, csurf(), sessionAuth, api);
 
 // this endpoint delivers the bokeh autoload script
 app.get('/script/:id', function(req, res) {
