@@ -32,7 +32,6 @@
 					var data = {user: this.loginForm.user, password: this.loginForm.password};
 					axios.post('/login', data)
 					.then(res => {
-						console.log(res);
 						if (res.data.success) {
 							this.isError = false;
 							this.authenticate(res.data.user);

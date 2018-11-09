@@ -36,7 +36,6 @@ axios.defaults.baseURL = '/api/';
 
 // get CSRF token
 axios.get('/csrf').then(res => {
-	console.log(res.data.token);
 	axios.defaults.headers.common = {
 	    'X-CSRF-TOKEN': res.data.token
 	};
