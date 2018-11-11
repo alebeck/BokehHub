@@ -25,17 +25,21 @@ BokehHub is an application that comes as a self-contained Docker image which can
 * [To Do](#to-do)
 
 ## Credits
+
 I want to thank [Daniel Bias](http://danielbias.de) for his support & inspiration throughout this project!
 
 ## Motivation
+
 Visualizing results of scientific research is an important aspect of making publications more accessible to a wider audience. However, common ways of scientific data visualization lack interactivity and do not account for changing or continuously updating data. Moreover, publishing visualizations at more than one place (e.g. multiple websites) leads to redundancy and makes it difficult and time-consuming to maintain.  As a consequence, there is demand for a centralized approach of managing all visualizations at one place. That approach enables researchers to deliver accessible, interactive visualizations which are consistent and redundancy-free.
 
 ## Prerequisites
+
 * Docker
 * At least 8 GB RAM, more is recommended
 * Up-to-date linux distribution is recommended (e.g. Ubuntu 16.04)
 
 ## Setup
+
 ```sh
 # pull repository
 git clone https://github.com/alebeck/bokehhub.git
@@ -50,14 +54,17 @@ docker-compose up -d
 When starting BokehHub for the first time, this command can take up to 15 minutes. Once BokehHub is running, Docker will monitor the application and take care of restarting it in the event of an error. If you have Docker configured to run on system startup, Docker will also restart BokehHub when the machine is rebooted.
 
 ## First Steps
+
 After setup, BokehHub listens on port `80` by default. On the login screen, enter the default admin credentials (username: `admin`, password: `admin`) to be forwarded to your plots section. Then, navigate to the `Settings` tab to set your hostname as well as a new password. The former is mandatory since the BokehHub installation cannot know its public host name or IP address while this information is required for the correct embedding of plots into webpages.
 
 ## Features
 
 ### Managing Datasets
+
 To upload a new dataset, go to the `Data` tab and click the `Add new` button. In case you want to update an existing dataset, click the `Arrow up` icon next to the relevant dataset. The new dataset will transparently replace the old one. Note that in this case, the old name of the dataset will be kept in order to avoid problems with plots that rely on that name. After the status indicator next to the relevant dataset has switched from yellow (i.e. pending) to green (i.e. ready), the new dataset is used by every plot which was using the old dataset before.
 
 ### Creating Plots
+
 You can create a visualization by navigating to the `Plots` tab and clicking `Add New`. A dialog will open which presents a text editor with a boilerplate Bokeh application, ready to be extended:
 
 ```python
@@ -93,6 +100,7 @@ doc.add_root(p)
 provided that `p` is a valid Bokeh figure. For further reference on how to create Bokeh visualizations, I recommend consulting the extensive Bokeh user guide (e.g. https://bokeh.pydata.org/en/latest/docs/user_guide/plotting.html). For the definition of complex applications which include server-side logic, a look at https://bokeh.pydata.org/en/latest/docs/user_guide/server.html may be advised.
 
 #### Best Practices
+
 There are a few best practices when creating Bokeh plots which help to improve the visual experience in combination with BokehHub. First of all, you should configure your plot to have no outline:
 
 ```python
@@ -111,12 +119,14 @@ p = figure(
 Finally, it is advised to test your plots first in an environment outside of BokehHub. BokehHub will warn you in case of syntax errors, however, runtime errors will be hard to spot and can be easily avoided when testing the plot beforehand. This is particularly relevant when working with very complex visualizations. As a testing environment, Jupyter Notebook / Lab is recommended.
 
 #### Plot Sizing
+
 Sizing your plot correctly will influence the way it behaves both on BokehHub and on websites where it will be embedded. In general, we have two sizing possibilities for each plot:
 
 * Setting the size explicitly by passing a `width` and/or `height` argument when creating a figure. In most cases, setting only the width is enough since Bokeh tries to keep the aspect ratio of the visualization. When setting the size of the plot this way, it will have the same size on every page where you embed the plot.
 * Passing `sizing_mode='stretch_both'` when creating a figure. You can then dynamically set the plot size when embedding it into a web page. Normally, this mode is preferable over the above-mentioned option. However, working with grids in combination with this option is currently not sufficiently supported by Bokeh version 0.12. Therefore, you need to use explicit sizes when working with grids, columns or rows.
 
 ### Embedding Plots
+
 To embed a visualization, go to the plot overview and click the `Show Tokens` symbol in the line corresponding to the relevant plot. In the appearing dialog, you can manage your security tokens. In order to create a new token, click `New Token`. In the following dialog, you will be asked to enter a token name for identification purposes. It is recommended to choose the name of the website which you want to embed the plot into, such that when revoking the token, you can easily identify it by that name.
 
 By clicking the embed logo next to an issued token, all relevant information is displayed. This includes a simple `plot` tag which can be inserted in the target page's HTML:
@@ -138,6 +148,7 @@ This script will resolve all `plot` tags on the page and setup the corresponding
 When embedding a plot into a website, the source code of that website will reveal the token which is used to gain access to the plot. It is therefore advised to revoke the relevant token once a plot is not used any longer.
 
 ## Migration
+
 BokehHub creates three subdirectories inside `~/bokehhub`:
 
 * `config`: Contains configuration files which define visualization tokens, login information and general settings
