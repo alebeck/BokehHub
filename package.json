@@ -26,6 +26,7 @@
 		"morgan": "",
 		"express-rate-limit": "",
 		"sanitize-filename": "",
-		"csurf": ""
+		"csurf": "",
+		"sse-express": ""
 	}
 }

@@ -11,6 +11,7 @@ const session = require('express-session');
 const RateLimit = require('express-rate-limit');
 const csurf = require('csurf')
 const proxy = require('http-proxy-middleware');
+const sseExpress = require('sse-express');
 const path = require('path');
 const RedisStore = require('connect-redis')(session);
 const bcrypt = require('bcrypt');
@@ -80,6 +81,8 @@ function _restart(writeFile, onRestart, onError) {
 					var proc = spawn('python3', [args.bokehPath, inactive.port], {detached: false});
 					proc.stdout.on('data', (data) => {
 						var out = String.fromCharCode.apply(null, data);
+						console.log('BokehServer: ' + out);
+
 						if (out === 'SERVER READY') {
 							console.log('Server ready.');
 							// execute all onRestart callbacks
@@ -260,15 +263,23 @@ _restart(
 	[() => {}]
 );
 
-const subscribe = function(req, res) {
+/*const subscribe = function(req, res) {
 	restartCallbacks.push(() => res.json({restarted: true}));
-};
+};*/
 
-const getPlots = function(req, res) {
+// API endpoints
+const api = express.Router();
+
+api.get('/events', sseExpress, function(req, res) {
+	restartCallbacks.push(() => res.sse('message', 'restarted'));
+	res.sse('message', 'connected')
+});
+
+api.get('/plots', function(req, res) {
 	res.json(plots);
-};
+});
 
-const putPlot = function(req, res) {
+api.put('/plots/:id', function(req, res) {
 	if (!req.params.id || !req.body.code) {
 		res.json({success: false});
 		return;
@@ -286,9 +297,9 @@ const putPlot = function(req, res) {
 	};
 	// restart server
 	restartServer({plot: req.params.id}, writeFile, updateState, res);
-};
+});
 
-const deletePlot = function(req, res) {
+api.delete('/plots/:id', function(req, res) {
 	if (!req.params.id) {
 		res.json({success: false});
 		return;
@@ -304,9 +315,9 @@ const deletePlot = function(req, res) {
 	};
 	// restart server
 	restartServer({plot: req.params.id}, writeFile, updateState, res);
-};
+});
 
-const postPlot = function(req, res) {
+api.post('/plots', function(req, res) {
 	if (!req.body.code) {
 		res.json({success: false});
 		return;
@@ -324,9 +335,9 @@ const postPlot = function(req, res) {
 	};
 
 	restartServer({plot: id}, writeFile, () => {}, res);
-};
+});
 
-const login = function(req, res) {
+api.post('/login', function(req, res) {
 	if (!req.body.user || !req.body.password) {
 		res.json({success: false});
 		return
@@ -350,18 +361,18 @@ const login = function(req, res) {
 		}
 		res.json({success: false});
 	});
-};
+});
 
-const logout = function(req, res) {
+api.get('/logout', function(req, res) {
 	req.session.user = null;
 	res.json({success: true});
-};
+});
 
-const getDatasets = function(req, res) {
+api.get('/datasets', function(req, res) {
 	res.json(datasets);
-};
+});
 
-const putDataset = function(req, res) {
+api.put('/datasets/:name', fileUpload(), function(req, res) {
 	if (!req.params.name || !req.files.file) {
 		res.json({success: false});
 		return
@@ -385,9 +396,9 @@ const putDataset = function(req, res) {
 
 	// restart server
 	restartServer({dataset: req.params.name}, writeFile, updateState, res);
-};
+});
 
-const postDataset = function(req, res) {
+api.post('/datasets', fileUpload(), function(req, res) {
 	if (!req.files.file) {
 		res.json({success: false});
 		return
@@ -407,9 +418,9 @@ const postDataset = function(req, res) {
 	});
 	// restart server
 	restartServer({dataset: file.name}, writeFile, () => {}, res);
-};
+});
 
-const deleteDataset = function(req, res) {
+api.delete('/datasets/:name', function(req, res) {
 	if (!req.params.name) {
 		res.json({success: false});
 		return;
@@ -423,25 +434,25 @@ const deleteDataset = function(req, res) {
 
 	// restart server
 	restartServer({dataset: req.params.name}, writeFile, updateState, res);
-};
+});
 
-const download = function(req, res) {
+api.get('/download/:name', function(req, res) {
 	if (!req.params.name) {
 		res.status(400).end();
 		return;
 	}
 	res.sendFile(sanitize(req.params.name), {root: path.join(process.cwd(), args.dataPath)})
-};
+});
 
-const getSettings = function(req, res) {
+api.get('/settings', function(req, res) {
 	if (!req.session.user || !req.session.user.admin) {
 		res.status(401).end();
 		return;
 	}
 	res.json({success: true, settings: config.get('settings')});
-};
+});
 
-const putSettings = function(req, res) {
+api.put('/settings', function(req, res) {
 	if (!req.session.user || !req.session.user.admin) {
 		res.status(401).end();
 		return;
@@ -480,9 +491,9 @@ const putSettings = function(req, res) {
 		config.save();
 		res.json({success: true});
 	}
-};
+});
 
-const getTokens = function(req, res) {
+api.get('/tokens/:plotId', function(req, res) {
 	if (!req.params.plotId) {
 		res.status(400).end();
 		return;
@@ -493,9 +504,9 @@ const getTokens = function(req, res) {
 		return
 	}
 	res.json({success: true, tokens: []})
-};
+});
 
-const postToken = function(req, res) {
+api.post('/tokens', function(req, res) {
 	// post a name, add it to config and return token
 	if (!req.body.name || !req.body.plotId) {
 		res.status(400).end();
@@ -510,9 +521,9 @@ const postToken = function(req, res) {
 	config.put('tokens.' + req.body.plotId, tokens);
 	config.save();
 	res.json({success: true, token: token})
-};
+});
 
-const deleteToken = function(req, res) {
+api.delete('/tokens', function(req, res) {
 	if (!req.body.plotId || !req.body.token) {
 		res.status(400).end();
 		return;
@@ -522,11 +533,11 @@ const deleteToken = function(req, res) {
 	config.put('tokens.' + req.body.plotId, tokens);
 	config.save();
 	res.json({success: true})
-};
+});
 
-const getCSRFToken = function(req, res) {
+api.get('/csrf', function(req, res) {
 	res.json({token: req.csrfToken()})
-};
+});
 
 // Session authentication middleware
 const sessionAuth = function(req, res, next) {
@@ -563,26 +574,6 @@ app.use('/css', express.static('css'));
 app.get('/js', function (req, res) {
 	res.render('client', {hostname: config.get('settings.hostname')})
 });
-
-var api = express.Router();
-api.get('/subscribe', subscribe);
-api.get('/plots', getPlots);
-api.put('/plots/:id', putPlot);
-api.delete('/plots/:id', deletePlot);
-api.post('/plots', postPlot);
-api.post('/login', login);
-api.get('/logout', logout);
-api.get('/datasets', getDatasets);
-api.post('/datasets', fileUpload(), postDataset);
-api.delete('/datasets/:name', deleteDataset);
-api.put('/datasets/:name', fileUpload(), putDataset);
-api.get('/download/:name', download);
-api.get('/settings', getSettings);
-api.put('/settings', putSettings);
-api.get('/tokens/:plotId', getTokens);
-api.post('/tokens', postToken);
-api.delete('/tokens', deleteToken);
-api.get('/csrf', getCSRFToken);
 
 const rateLimit = new RateLimit({
 	windowMs: 1*60*1000, // 1 minute

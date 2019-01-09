@@ -65,16 +65,12 @@
 		},
 	
 		methods: {
-	
+
 			subscribe() {
 				// subscribe to bokeh restart event
-				axios.get('/subscribe').then(res => {
-					if (res.data.restarted) {
-						this.reloadDatasets();
-					} else {
-						console.error('Subscribe connection ended unexpectedly');
-					}
-					this.subscribe();
+				this.$root.$on('restarted', () => {
+					console.log('Reloading plots...');
+					this.reloadDatasets();
 				})
 			},
 	

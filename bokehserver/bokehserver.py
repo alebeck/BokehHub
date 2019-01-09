@@ -19,6 +19,9 @@ plotDict = {}
 
 # include plot files found in /plots
 for file in glob.glob("./bokehserver/plots/plot_*.py"):
+	sys.stdout.write('Reading in ' + file + '...\n')
+	sys.stdout.flush()
+	
 	id = file[-11:-3]
 	try:
 		module = importlib.import_module("plots.plot_" + id)
