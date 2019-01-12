@@ -11,9 +11,35 @@
 	
 	export default {
 		name: 'Layout',
+
 		components: {
 			Navbar,
 			AppMain
+		},
+
+		data() {
+			return {
+				eventSource: null
+			}
+		},
+
+		methods: {
+			receiveMessage(message) {
+				let parsed = JSON.parse(message.data);
+				console.log('Received remote event: ' + parsed);
+				this.$root.$emit(parsed);
+			}
+		},
+
+		created() {
+			// Setup event source
+			this.eventSource = new EventSource('/api/events');
+			this.eventSource.addEventListener('message', this.receiveMessage);
+		},
+
+		beforeDestroy() {
+			this.$root.$off();
+			this.eventSource.removeEventListener('message', this.receiveMessage);
 		}
 	}
 </script>

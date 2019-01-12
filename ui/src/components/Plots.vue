@@ -274,13 +274,11 @@
 	
 			subscribe() {
 				// subscribe to bokeh restart event
-				this.$root.$on('restarted', () => {
-					console.log('Reloading plots...');
-					this.reloadPlots();
-				})
+				this.$root.$off('restarted', this.reloadPlots).$on('restarted', this.reloadPlots)
 			},
 	
 			reloadPlots() {
+				console.log('reloading plots');
 				axios.get('/plots').then(res => {
 					this.plots = res.data;
 				}).catch(err => {

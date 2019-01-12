@@ -94,7 +94,7 @@ function _restart(writeFile, onRestart, onError) {
 
 							// notify clients
 							restartCallbacks.forEach(cb => cb())
-							restartCallbacks = [];
+							//restartCallbacks = [];
 							bokehRestarting = false;
 
 							// trigger next server restart if queue is not empty
@@ -263,15 +263,15 @@ _restart(
 	[() => {}]
 );
 
-/*const subscribe = function(req, res) {
-	restartCallbacks.push(() => res.json({restarted: true}));
-};*/
-
 // API endpoints
 const api = express.Router();
 
 api.get('/events', sseExpress, function(req, res) {
-	restartCallbacks.push(() => res.sse('message', 'restarted'));
+	restartCallbacks = [];
+	restartCallbacks.push(() => {
+		console.log('Sending restart event.');
+		res.sse('message', 'restarted');
+	});
 	res.sse('message', 'connected')
 });
 

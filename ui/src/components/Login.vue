@@ -36,12 +36,6 @@
 							this.isError = false;
 							this.authenticate(res.data.user);
 							this.setSettings(res.data.settings);
-
-							(new EventSource('/api/events')).addEventListener('message', message => {
-								console.log('Received remote event: ' + message);
-								this.$root.$emit(message);
-							});
-
 							this.$router.push('/');
 							return;
 						}

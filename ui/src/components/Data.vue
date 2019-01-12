@@ -53,7 +53,8 @@
 			return {
 				datasets: [],
 				vcOptions: {
-					url: '/api/datasets'
+					url: '/api/datasets',
+					headers: axios.defaults.headers.common
 				},
 				emptyText: 'No datasets found.'
 			}
@@ -68,13 +69,11 @@
 
 			subscribe() {
 				// subscribe to bokeh restart event
-				this.$root.$on('restarted', () => {
-					console.log('Reloading plots...');
-					this.reloadDatasets();
-				})
+				this.$root.$off('restarted', this.reloadDatasets).$on('restarted', this.reloadDatasets)
 			},
 	
 			reloadDatasets() {
+				console.log('reloading datasets');
 				axios.get('/datasets')
 				.then(res => {
 					this.datasets = res.data;
@@ -95,7 +94,8 @@
 			getUploadOptions(name) {
 				return {
 					url: '/api/datasets/' + name,
-					method: 'put'
+					method: 'put',
+					headers: axios.defaults.headers.common
 				}
 			},
 	
