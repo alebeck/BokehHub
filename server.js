@@ -6,6 +6,8 @@
 
 const fs = require('fs');
 const express = require('express');
+const https = require('https')
+const http = require('http');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const RateLimit = require('express-rate-limit');
@@ -662,11 +664,17 @@ var wsProxy = proxy({
 
 app.use(wsProxy);
 
-console.log(`BokehHub starting on port ${args.port}`);
-
-app.listen(args.port).on('upgrade', (req, socket) => {
+https.createServer({
+	key: fs.readFileSync(args.key),
+	cert: fs.readFileSync(args.cert),
+	ca: fs.readFileSync(args.chain)
+}, app)
+.listen(args.port, () => {
+	console.log(`Listening on port ${args.port} (TLS)...`)
+})
+.on('upgrade', (req, socket) => {
 	_session(req, {}, () => {
 		// Calls proxy when req.session is already present
 		wsProxy.upgrade(req, socket)
-	})
+	});
 });
