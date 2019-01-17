@@ -56,7 +56,7 @@
 					url: '/api/datasets',
 					headers: axios.defaults.headers.common
 				},
-				emptyText: 'No datasets found.'
+				emptyText: 'Loading datasets...'
 			}
 		},
 	
@@ -77,6 +77,7 @@
 				axios.get('/datasets')
 				.then(res => {
 					this.datasets = res.data;
+					this.emptyText = 'No datasets found.';
 				}).catch(err => {
 					if (err.response.status && err.response.status == 401) {
 						this.deauthenticate();

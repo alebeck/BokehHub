@@ -134,7 +134,7 @@
 				code: '',
 				tagCode: '',
 				scriptCode: '',
-				emptyText: 'You have no plots running at the moment.',
+				emptyText: 'Loading plots...',
 				plotId: null,
 				cmOptions: {
 					tabSize: 4,
@@ -281,6 +281,7 @@
 				console.log('reloading plots');
 				axios.get('/plots').then(res => {
 					this.plots = res.data;
+					this.emptyText = 'You have no plots running at the moment.';
 				}).catch(err => {
 					if (err.response.status && err.response.status == 401) {
 						this.deauthenticate();
