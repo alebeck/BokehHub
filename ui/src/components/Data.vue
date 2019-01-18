@@ -1,8 +1,13 @@
 <template>
 	<div>
-		<el-table :data="datasets" :empty-text="emptyText" style="width: 100%; margin-top: 60px">
+		<el-table 
+			:data="datasets"
+			:empty-text="emptyText"
+			:default-sort = "{prop: 'date', order: 'descending'}"
+			style="width: 100%; margin-top: 60px">
+
 			<el-table-column type="index" width="50"></el-table-column>
-			<el-table-column prop="name" label="Name" width="auto">
+			<el-table-column prop="name" label="Name" width="auto" sortable>
 				<template slot-scope="scope">
 					<status-indicator v-bind="getStatus(scope.row)"></status-indicator>
 					<span style="margin-left: 6px">{{ scope.row.name }}</span>

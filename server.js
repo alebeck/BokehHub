@@ -592,7 +592,7 @@ app.get('/script/:id', function(req, res) {
 	}
 	let id = req.params.id;
 	let token = req.query.token;
-	let tokens = config.get('tokens.'+id);
+	let tokens = config.get('tokens.' + id);
 
 	if (tokens) {
 		tokens = tokens.map(t => t.token);
@@ -632,7 +632,7 @@ app.use('/static/*', proxy({
 }));
 
 // this middleware proxies websocket connections to the bokeh servers
-var wsProxy = proxy({
+var wsProxy = proxy('/*/ws', {
 	target: `http://localhost:${bokehServers.filter(server => server.active)[0].port}/`,
 	changeOrigin: true,
 	ws: true,
@@ -653,7 +653,7 @@ var wsProxy = proxy({
 		let tokens = config.get('tokens.'+id);
 		tokens = tokens ? tokens.map(t => t.token) : [];
 
-		if (tokens.includes(token) || req.session.user) {
+		if (tokens.includes(token) || (req.session && req.session.user)) {
 			let port = bokehServers.filter(server => server.active)[0].port;
 			return 'http://localhost:' + port;
 		}
@@ -665,16 +665,16 @@ var wsProxy = proxy({
 app.use(wsProxy);
 
 https.createServer({
-	key: fs.readFileSync(args.key),
-	cert: fs.readFileSync(args.cert),
-	ca: fs.readFileSync(args.chain)
+	key: args.key ? fs.readFileSync(args.key) : undefined,
+	cert: args.cert ? fs.readFileSync(args.cert) : undefined,
+	ca: args.chain ? fs.readFileSync(args.chain) : undefined
 }, app)
 .listen(args.port, () => {
-	console.log(`Listening on port ${args.port} (TLS)...`)
+	console.log(`Listening on port ${args.port} (TLS)...`);
 })
 .on('upgrade', (req, socket) => {
 	_session(req, {}, () => {
 		// Calls proxy when req.session is already present
-		wsProxy.upgrade(req, socket)
+		wsProxy.upgrade(req, socket);
 	});
 });

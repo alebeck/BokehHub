@@ -1,6 +1,10 @@
 <template>
 	<div>
-		<el-table :data="plots" :empty-text="emptyText" style="width: 100%; margin-top: 60px">
+		<el-table 
+			:data="plots" 
+			:empty-text="emptyText" 
+			:default-sort = "{prop: 'date', order: 'descending'}" 
+			style="width: 100%; margin-top: 60px">
 
 			<el-table-column type="index" width="50"></el-table-column>
 
@@ -11,7 +15,7 @@
 				</template>
 			</el-table-column>
 
-			<el-table-column prop="title" label="Title" width="auto"></el-table-column>
+			<el-table-column prop="title" label="Title" width="auto" sortable></el-table-column>
 
 			<el-table-column prop="date" label="Last changed" width="180" sortable>
 				<template slot-scope="scope">
