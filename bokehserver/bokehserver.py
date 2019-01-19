@@ -5,34 +5,37 @@
 import glob
 import importlib
 import sys
+import timeout_decorator
 
 from bokeh.server.server import Server
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 
-if len(sys.argv) > 1:
-	PORT = int(sys.argv[1])
-else:
-	PORT = 8001
+def write(text):
+	sys.stdout.write(text)
+	sys.stdout.flush()
 
+PORT = int(sys.argv[1])
 plotDict = {}
+
+@timeout_decorator.timeout(60)
+def add_function_handler(id):
+	write('Importing module with id ' + id + '\n')
+	module = importlib.import_module("plots.plot_" + id)
+	make_document = getattr(module, "make_document")
+	plotDict[id] = Application(FunctionHandler(make_document))
 
 # include plot files found in /plots
 for file in glob.glob("./bokehserver/plots/plot_*.py"):
-	sys.stdout.write('Reading in ' + file + '...\n')
-	sys.stdout.flush()
-	
+	write('Reading in ' + file + '...\n')
 	id = file[-11:-3]
 	try:
-		module = importlib.import_module("plots.plot_" + id)
-		make_document = getattr(module, "make_document")
-		plotDict[id] = Application(FunctionHandler(make_document))
+		add_function_handler(id)
 	except Exception as e:
-		sys.stdout.write("ERROR PLOT " + id + ' ' + str(e))
-		sys.stdout.flush()
+		write("ERROR PLOT " + id + ' ' + str(e))
 
 # define Bokeh applications
-apps = { ('/' + id): fn for (id,fn) in plotDict.items() }
+apps = { ('/' + id): fn for id, fn in plotDict.items() }
 
 # define Bokeh server
 server = Server(apps, port=PORT, allow_websocket_origin=["*"], sign_sessions=False, generate_session_ids=True)

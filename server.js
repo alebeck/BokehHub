@@ -86,7 +86,6 @@ function _restart(writeFile, onRestart, onError) {
 						console.log('BokehServer: ' + out);
 
 						if (out === 'SERVER READY') {
-							console.log('Server ready.');
 							// execute all onRestart callbacks
 							onRestart.forEach(f => f());
 
@@ -109,7 +108,6 @@ function _restart(writeFile, onRestart, onError) {
 							}
 						}
 						else if (out.startsWith('ERROR PLOT ')) {
-							console.error(out);
 							var splitted = out.split(' ');
 							var id = splitted[2];
 							var message = splitted.slice(3).join(' ');
@@ -129,7 +127,6 @@ function _restart(writeFile, onRestart, onError) {
 							})
 						}
 						else if (out.startsWith('ERROR DATASET ')) {
-							console.error(out);
 							var splitted = out.split(' ');
 							var name = splitted[2];
 							var message = splitted.slice(3).join(' ');
