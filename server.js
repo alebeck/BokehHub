@@ -655,23 +655,39 @@ var wsProxy = proxy('/*/ws', {
 			return 'http://localhost:' + port;
 		}
 		// fail
+		console.log('Fail ws proxy');
+		console.log(req.session);
 		return 'http://localhost:7000/';
 	}
 });
 
 app.use(wsProxy);
 
-https.createServer({
-	key: args.key ? fs.readFileSync(args.key) : undefined,
-	cert: args.cert ? fs.readFileSync(args.cert) : undefined,
-	ca: args.chain ? fs.readFileSync(args.chain) : undefined
-}, app)
-.listen(args.port, () => {
-	console.log(`Listening on port ${args.port} (TLS)...`);
-})
-.on('upgrade', (req, socket) => {
-	_session(req, {}, () => {
-		// Calls proxy when req.session is already present
-		wsProxy.upgrade(req, socket);
+if (args.cert) {
+	https.createServer({
+		key: args.key ? fs.readFileSync(args.key) : undefined,
+		cert: args.cert ? fs.readFileSync(args.cert) : undefined,
+		ca: args.chain ? fs.readFileSync(args.chain) : undefined
+	}, app)
+	.listen(args.port, () => {
+		console.log(`Listening on port ${args.port} (TLS)...`);
+	})
+	.on('upgrade', (req, socket) => {
+		_session(req, {}, () => {
+			// Calls proxy when req.session is already present
+			wsProxy.upgrade(req, socket);
+		});
 	});
-});
+}
+else {
+	http.createServer(app)
+	.listen(args.port, () => {
+		console.log(`Listening on port ${args.port}...`);
+	})
+	.on('upgrade', (req, socket) => {
+		_session(req, {}, () => {
+			// Calls proxy when req.session is already present
+			wsProxy.upgrade(req, socket);
+		});
+	});
+}
