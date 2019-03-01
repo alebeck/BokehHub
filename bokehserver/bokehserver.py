@@ -12,27 +12,27 @@ from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 
 def write(text):
-	sys.stdout.write(text)
-	sys.stdout.flush()
+    sys.stdout.write(text)
+    sys.stdout.flush()
 
 PORT = int(sys.argv[1])
 plotDict = {}
 
 @timeout_decorator.timeout(60)
 def add_function_handler(id):
-	write('Importing module with id ' + id + '\n')
-	module = importlib.import_module("plots.plot_" + id)
-	make_document = getattr(module, "make_document")
-	plotDict[id] = Application(FunctionHandler(make_document))
+    write('Importing module with id ' + id + '\n')
+    module = importlib.import_module("plots.plot_" + id)
+    make_document = getattr(module, "make_document")
+    plotDict[id] = Application(FunctionHandler(make_document))
 
 # include plot files found in /plots
 for file in glob.glob("./bokehserver/plots/plot_*.py"):
-	write('Reading in ' + file + '...\n')
-	id = file[-11:-3]
-	try:
-		add_function_handler(id)
-	except Exception as e:
-		write("ERROR PLOT " + id + ' ' + str(e))
+    write('Reading in ' + file + '...\n')
+    id = file[-11:-3]
+    try:
+        add_function_handler(id)
+    except Exception as e:
+        write("ERROR PLOT " + id + ' ' + str(e))
 
 # define Bokeh applications
 apps = { ('/' + id): fn for id, fn in plotDict.items() }

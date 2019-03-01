@@ -11,5 +11,5 @@ datapath = {}
 files = [f for f in glob.glob("./bokehserver/data/datasets/*") if not os.path.basename(f).startswith('.')]
 
 for file in files:
-	name = file.split("/")[-1]
-	datapath[name] = file
+    name = file.split("/")[-1]
+    datapath[name] = file

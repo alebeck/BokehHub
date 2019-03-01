@@ -24,9 +24,9 @@ Vue.config.productionTip = false;
 Vue.use(Element, {size: 'medium'});
 Vue.use(VueClip);
 Vue.use(VueProgressBar, {
-	color: 'rgb(143, 255, 199)',
-	failedColor: 'red',
-	height: '2px'
+    color: 'rgb(143, 255, 199)',
+    failedColor: 'red',
+    height: '2px'
 });
 
 Vue.component('icon', Icon);
@@ -36,16 +36,16 @@ axios.defaults.baseURL = '/api/';
 
 // get CSRF token
 axios.get('/csrf').then(res => {
-	axios.defaults.headers.common = {
-	    'X-CSRF-TOKEN': res.data.token
-	};
+    axios.defaults.headers.common = {
+        'X-CSRF-TOKEN': res.data.token
+    };
 });
 
 /* eslint-disable no-new */
 new Vue({
-	el: '#app',
-	router,
-	store,
-	components: { App },
-	template: '<App/>'
+    el: '#app',
+    router,
+    store,
+    components: { App },
+    template: '<App/>'
 });

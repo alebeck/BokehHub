@@ -1,54 +1,54 @@
 var host = "{{{hostname}}}";
 
 var getScript = function(id, token) {
-	var script = document.createElement('script');
-	script.id = id;
-	script.src = host + '/script/' + id + '?token=' + token;
-	return script;
+    var script = document.createElement('script');
+    script.id = id;
+    script.src = host + '/script/' + id + '?token=' + token;
+    return script;
 };
 
 document.addEventListener('DOMContentLoaded', function() {
-	if (!document.getElementById('bokehhub-css')) {
-		var head = document.getElementsByTagName('head')[0];
-		var link = document.createElement('link');
-		link.id = 'bokehhub-css';
-		link.rel = 'stylesheet';
-		link.type = 'text/css';
-		link.href = host + '/css/client.css';
-		link.media = 'all';
-		head.appendChild(link);
-	}
+    if (!document.getElementById('bokehhub-css')) {
+        var head = document.getElementsByTagName('head')[0];
+        var link = document.createElement('link');
+        link.id = 'bokehhub-css';
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = host + '/css/client.css';
+        link.media = 'all';
+        head.appendChild(link);
+    }
 
-	var plots = document.getElementsByTagName('plot');
-	Array.from(plots).forEach(function(plot) {
-		if (!plot.id || !plot.getAttribute('width') || !plot.getAttribute('key')) {
-			console.error('Invalid plot tag.');
-			return;
-		}
-		var plotContainer = document.createElement('div');
-		plotContainer.className = 'plot-container';
+    var plots = document.getElementsByTagName('plot');
+    Array.from(plots).forEach(function(plot) {
+        if (!plot.id || !plot.getAttribute('width') || !plot.getAttribute('key')) {
+            console.error('Invalid plot tag.');
+            return;
+        }
+        var plotContainer = document.createElement('div');
+        plotContainer.className = 'plot-container';
 
-		var plotDiv = document.createElement('div');
-		plotDiv.className = 'plot';
-		var width = plot.getAttribute('width') || '970';
-		var height = plot.getAttribute('height') || '400';
+        var plotDiv = document.createElement('div');
+        plotDiv.className = 'plot';
+        var width = plot.getAttribute('width') || '970';
+        var height = plot.getAttribute('height') || '400';
 
-		var plotLoader = document.createElement('div');
-		plotLoader.className = 'plot-loader';
-		plotLoader.setAttribute('style', 'position: absolute; margin-top: ' + (parseInt(height)/2 - 35) + 'px');
+        var plotLoader = document.createElement('div');
+        plotLoader.className = 'plot-loader';
+        plotLoader.setAttribute('style', 'position: absolute; margin-top: ' + (parseInt(height)/2 - 35) + 'px');
 
-		if (!width.endsWith('px')) {
-			width += 'px';
-		}
-		if (!height.endsWith('px')) {
-			height += 'px';
-		}
-		plotDiv.setAttribute('style', 'margin: 0 auto; position: relative; width: ' + width + '; height: ' + height);
-		plotContainer.appendChild(plotDiv);
+        if (!width.endsWith('px')) {
+            width += 'px';
+        }
+        if (!height.endsWith('px')) {
+            height += 'px';
+        }
+        plotDiv.setAttribute('style', 'margin: 0 auto; position: relative; width: ' + width + '; height: ' + height);
+        plotContainer.appendChild(plotDiv);
 
-		plot.parentNode.insertBefore(plotContainer, plot.nextSibling);
-		plot.parentNode.removeChild(plot);
-		plotDiv.appendChild(plotLoader);
-		plotDiv.appendChild(getScript(plot.id, plot.getAttribute('key')));
-	});
+        plot.parentNode.insertBefore(plotContainer, plot.nextSibling);
+        plot.parentNode.removeChild(plot);
+        plotDiv.appendChild(plotLoader);
+        plotDiv.appendChild(getScript(plot.id, plot.getAttribute('key')));
+    });
 });
