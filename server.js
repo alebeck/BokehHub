@@ -6,12 +6,12 @@
 
 const fs = require('fs');
 const express = require('express');
-const https = require('https')
+const https = require('https');
 const http = require('http');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const RateLimit = require('express-rate-limit');
-const csurf = require('csurf')
+const csurf = require('csurf');
 const proxy = require('http-proxy-middleware');
 const sseExpress = require('sse-express');
 const path = require('path');
