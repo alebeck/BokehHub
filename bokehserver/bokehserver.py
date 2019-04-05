@@ -10,6 +10,7 @@ import timeout_decorator
 from bokeh.server.server import Server
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
+from bokeh.document import Document
 
 def write(text):
     sys.stdout.write(text)
@@ -23,6 +24,9 @@ def add_function_handler(id):
     write('Importing module with id ' + id + '\n')
     module = importlib.import_module("plots.plot_" + id)
     make_document = getattr(module, "make_document")
+    # invoke make_document to identify runtime errors
+    make_document(Document())
+
     plotDict[id] = Application(FunctionHandler(make_document))
 
 # include plot files found in /plots
