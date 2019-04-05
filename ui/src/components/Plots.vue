@@ -44,7 +44,14 @@
             <plot :key="plotKey" :plot="dialogPlot"></plot>
         </el-dialog>
 
-        <el-dialog custom-class="editDialog" title="Edit Plot" :visible.sync="editDialogVisible" width="80%" top="5vh">
+        <el-dialog 
+            custom-class="editDialog" 
+            title="Edit Plot" 
+            close-on-click-modal="false" 
+            :visible.sync="editDialogVisible" 
+            width="80%" 
+            top="5vh"
+        >
             <codemirror v-model="code" :options="cmOptions"></codemirror>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="editDialogVisible = false">Cancel</el-button>
@@ -52,7 +59,14 @@
             </span>
         </el-dialog>
 
-        <el-dialog custom-class="editDialog" title="New Plot" :visible.sync="createDialogVisible" width="80%" top="5vh">
+        <el-dialog 
+            custom-class="editDialog" 
+            title="New Plot" 
+            close-on-click-modal="false" 
+            :visible.sync="createDialogVisible" 
+            width="80%" 
+            top="5vh"
+        >
             <codemirror v-model="newPlot.code" :options="cmOptions"></codemirror>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="createDialogVisible = false">Cancel</el-button>
