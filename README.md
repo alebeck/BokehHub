@@ -28,7 +28,7 @@ I want to thank [Daniel Bias](http://danielbias.de) for his support & inspiratio
 
 ## Motivation
 
-Visualizing results of scientific research is an important aspect of making publications more accessible to a wider audience. However, common ways of scientific data visualization lack interactivity and do not account for changing or continuously updating data. Moreover, publishing visualizations at more than one place (e.g. multiple websites) leads to redundancy and makes it difficult and time-consuming to maintain.  As a consequence, there is demand for a centralized approach of managing all visualizations at one place. That approach enables researchers to deliver accessible, interactive visualizations which are consistent and redundancy-free.
+Visualizing results of scientific research is an important aspect of making publications more accessible to a wider audience. However, common ways of scientific data visualization lack interactivity and do not account for changing or continuously updating data. Moreover, publishing visualizations at more than one place (e.g. multiple websites) leads to redundancy and makes maintenance difficult and time-consuming.  As a consequence, there is demand for a centralized approach of managing all visualizations at one place. That approach enables researchers to deliver accessible, interactive visualizations which are consistent and redundancy-free.
 
 ## Prerequisites
 
